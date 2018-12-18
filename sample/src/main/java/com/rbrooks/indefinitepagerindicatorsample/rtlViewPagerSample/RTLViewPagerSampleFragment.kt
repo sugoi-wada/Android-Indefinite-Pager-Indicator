@@ -1,13 +1,13 @@
 package com.rbrooks.indefinitepagerindicatorsample.viewPagerSample
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v4.view.ViewPager
-import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.viewpager.widget.ViewPager
 import com.rbrooks.indefinitepagerindicator.IndefinitePagerIndicator
 import com.rbrooks.indefinitepagerindicatorsample.MainActivity
 import com.rbrooks.indefinitepagerindicatorsample.R
@@ -30,7 +30,7 @@ class RTLViewPagerSampleFragment : Fragment(), OnPagerNumberChangeListener, View
     ): View? {
         val view = inflater.inflate(R.layout.fragment_rtl_view_pager_sample, container, false)
 
-        isVerticalEnabled = context.getSharedPreferences(
+        isVerticalEnabled = requireContext().getSharedPreferences(
             MainActivity.SHARED_PREFERENCES,
             AppCompatActivity.MODE_PRIVATE
         ).getBoolean(
@@ -53,7 +53,7 @@ class RTLViewPagerSampleFragment : Fragment(), OnPagerNumberChangeListener, View
     }
 
     private fun setupViews() {
-        pagerAdapter = ViewPagerAdapter(context)
+        pagerAdapter = ViewPagerAdapter(requireContext())
         viewPager.adapter = pagerAdapter
         if (isVerticalEnabled) {
             pagerIndicatorVertical.attachToViewPager(viewPager)
@@ -73,16 +73,17 @@ class RTLViewPagerSampleFragment : Fragment(), OnPagerNumberChangeListener, View
     }
 
     override fun onClick(v: View?) {
+        val adapter = viewPager.adapter ?: return
         when (v?.id) {
             R.id.viewpager_previous_button -> {
                 if (viewPager.currentItem == 0) {
-                    viewPager.currentItem = viewPager.adapter.count - 1
+                    viewPager.currentItem = adapter.count - 1
                 } else {
                     viewPager.currentItem = viewPager.currentItem - 1
                 }
             }
             R.id.viewpager_next_button -> {
-                if (viewPager.currentItem == viewPager.adapter.count - 1) {
+                if (viewPager.currentItem == adapter.count - 1) {
                     viewPager.currentItem = 0
                 } else {
                     viewPager.currentItem = viewPager.currentItem + 1
